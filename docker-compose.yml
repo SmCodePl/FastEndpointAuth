@@ -1,0 +1,10 @@
+version: '3.4'
+services:
+  AuthDb:
+      image: mcr.microsoft.com/mssql/server
+
+  fastendpointauth:
+    image: ${DOCKER_REGISTRY-}fastendpointauth
+    build:
+      context: .
+      dockerfile: FastEndpointAuth/Dockerfile

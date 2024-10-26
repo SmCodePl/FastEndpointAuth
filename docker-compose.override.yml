@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  AuthDb:
+    container_name: AuthDb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=P@ssword123!
+      - MSSQL_PID=Developer
+    restart: always
+    ports:
+      - "1433:1433"
+  fastendpointauth:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__AuthDb=Server=localhost;Database=AuthDb;User Id=sa;Password=P@ssword123!;Encrypt=False;TrustServerCertificate=True;MultipleActiveResultSets=True;
+    depends_on:
+      - AuthDb
+    ports:
+      - "5052:8080"
+      - "7251:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
